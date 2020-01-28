@@ -1,0 +1,43 @@
+package com.algaworks.algamoney.api.service;
+
+import java.util.Collection;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
+
+import com.algaworks.algamoney.api.model.Pessoa;
+import com.algaworks.algamoney.api.repository.PessoaRepository;
+
+@Service
+public class PessoaService {
+
+	@Autowired
+	PessoaRepository pessoaRepository;
+	
+	
+	public Collection<Pessoa> findAll() {
+		return pessoaRepository.findAll();
+	}
+	
+	public Pessoa findOne(Long codigo) {
+		return pessoaRepository.findOne(codigo);
+	}
+	
+	public Pessoa create() {
+		return null;
+	}
+	
+	
+	public Pessoa update(Long codigo, Pessoa pessoa) {
+		Pessoa savedPessoa = pessoaRepository.findOne(codigo);
+		if(savedPessoa == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		BeanUtils.copyProperties(pessoa, savedPessoa, "codigo");
+		return pessoaRepository.save(savedPessoa);
+	}
+	
+	
+}

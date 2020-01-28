@@ -1,0 +1,15 @@
+package com.algaworks.algamoney.api.event.listener;
+
+import org.springframework.context.ApplicationListener;
+
+import com.algaworks.algamoney.api.event.CreatedResourceEvent;
+
+public class CreatedResourceListener implements ApplicationListener<CreatedResourceEvent>{
+
+	@Override
+	public void onApplicationEvent(CreatedResourceEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

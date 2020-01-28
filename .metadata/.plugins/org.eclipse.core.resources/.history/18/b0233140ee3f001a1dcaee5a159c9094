@@ -1,0 +1,12 @@
+package com.algaworks.algamoney.api.event;
+
+import org.springframework.context.ApplicationEvent;
+
+public class CreatedResourceEvent extends ApplicationEvent {
+
+	public CreatedResourceEvent(Object source) {
+		super(source);
+		
+	}
+
+}

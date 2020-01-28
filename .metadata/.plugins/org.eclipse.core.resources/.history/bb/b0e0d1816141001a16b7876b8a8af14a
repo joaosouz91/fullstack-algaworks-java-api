@@ -1,0 +1,12 @@
+package com.algaworks.algamoney.api.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class LancamentoService {
+
+	
+	private LancamentoRepository lancamentoRepository;
+	
+	
+}
