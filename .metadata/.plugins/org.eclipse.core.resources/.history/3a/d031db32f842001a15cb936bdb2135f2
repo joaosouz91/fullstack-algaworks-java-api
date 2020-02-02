@@ -1,0 +1,4 @@
+mensagem.invalida=Mensagem inválida
+categoria.nome=Nome
+recurso.nao.encontrado=Recurso não encontrado
+codigo.nao.pode.ser.incluido=Código não pode ser passado nesta requisição

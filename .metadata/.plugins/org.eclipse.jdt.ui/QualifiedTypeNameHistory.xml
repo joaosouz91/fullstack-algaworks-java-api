@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.util.Arrays"/>
-<fullyQualifiedTypeName name="java.util.Collection"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PutMapping"/>
-<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
 <fullyQualifiedTypeName name="javax.validation.Valid"/>
-<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ExceptionHandler"/>
 <fullyQualifiedTypeName name="org.springframework.dao.EmptyResultDataAccessException"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ResponseStatus"/>
@@ -60,4 +56,8 @@
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RestController"/>
 <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonIgnore"/>
 <fullyQualifiedTypeName name="com.fasterxml.jackson.annotation.JsonIgnoreType"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+<fullyQualifiedTypeName name="org.springframework.data.domain.Pageable"/>
+<fullyQualifiedTypeName name="org.springframework.data.domain.Page"/>
 </qualifiedTypeNameHistroy>

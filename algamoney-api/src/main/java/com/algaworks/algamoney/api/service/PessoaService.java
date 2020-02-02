@@ -21,11 +21,9 @@ public class PessoaService {
 	}
 	
 	public Pessoa findOne(Long codigo) {
-		Pessoa savedPessoa = pessoaRepository.findOne(codigo);
-		if(savedPessoa == null) {
-			throw new EmptyResultDataAccessException(1);
-		}
-		return savedPessoa;
+		Pessoa pessoa = pessoaRepository.findOne(codigo);
+		if(pessoa == null) throw new EmptyResultDataAccessException(1);
+		return pessoa;
 	}
 	
 	public Pessoa create(Pessoa pessoa) {

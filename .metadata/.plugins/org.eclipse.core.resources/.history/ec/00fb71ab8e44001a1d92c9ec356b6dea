@@ -1,0 +1,66 @@
+package com.algaworks.algamoney.api.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.stereotype.Service;
+
+import com.algaworks.algamoney.api.exception.PessoaInexistenteOuInativaException;
+import com.algaworks.algamoney.api.model.Lancamento;
+import com.algaworks.algamoney.api.model.Pessoa;
+import com.algaworks.algamoney.api.repository.LancamentoRepository;
+
+@Service
+public class LancamentoService {
+
+	@Autowired
+	private PessoaService pessoaRepository;
+	
+	@Autowired
+	private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private MessageSource messageSource;
+	
+	public List<Lancamento> findAll() {
+		List<Lancamento> lancamentoList =  lancamentoRepository.findAll();
+		return lancamentoList;
+		
+//		código para retornar somente ids das entidades relacionadas
+//		List<LancamentoDTO> lancamentoDTOList = new ArrayList<LancamentoDTO>();
+//		
+//		for (Lancamento lancamento : lancamentoList) {
+//			LancamentoDTO dto = new LancamentoDTO();
+//			BeanUtils.copyProperties(lancamento, dto, "categoria", "pessoa");
+//			dto.setCodigo_categoria(lancamento.getCategoria().getCodigo());
+//			dto.setCodigo_pessoa(lancamento.getPessoa().getCodigo());
+//			lancamentoDTOList.add(dto);
+//		}
+//		return null;
+	}
+	
+	public Lancamento findById(Long codigo) {
+		Lancamento lancamento =  lancamentoRepository.findOne(codigo);
+		if(lancamento == null) throw new EmptyResultDataAccessException(1);
+		return lancamento;
+	}
+	
+	public Lancamento create(Lancamento lancamento) {
+		
+		if(lancamento.getCodigo() != null) throw new HttpMessageNotReadableException(
+				messageSource.getMessage("codigo.fora.escopo.requisicao", 
+				null, LocaleContextHolder.getLocale()));
+		
+		Pessoa pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+		if (pessoa == null || pessoa.isInativo()) {
+			throw new PessoaInexistenteOuInativaException();
+		}
+
+		return lancamentoRepository.save(lancamento);
+	}
+	
+}

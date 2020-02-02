@@ -3,3 +3,5 @@
 1580160711875	Delete element
 1580181791995	Copy compilation unit
 1580181803695	Rename compilation unit 'Lancamento.java'
+1580345411384	Rename local variable 'savedLancamento'
+1580345419147	Rename local variable 'savedPessoa'

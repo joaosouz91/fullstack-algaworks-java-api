@@ -1,26 +1,39 @@
 package com.algaworks.algamoney.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
+import com.algaworks.algamoney.api.exception.PessoaInexistenteOuInativaException;
 import com.algaworks.algamoney.api.model.Lancamento;
-import com.algaworks.algamoney.api.model.dto.LancamentoDTO;
+import com.algaworks.algamoney.api.model.Pessoa;
 import com.algaworks.algamoney.api.repository.LancamentoRepository;
+import com.algaworks.algamoney.api.repository.PessoaRepository;
+import com.algaworks.algamoney.api.repository.filter.LancamentoFilter;
 
 @Service
 public class LancamentoService {
 
 	@Autowired
+	private PessoaRepository pessoaRepository;
+	
+	@Autowired
 	private LancamentoRepository lancamentoRepository;
 	
-	public List<Lancamento> findAll() {
-		List<Lancamento> lancamentoList =  lancamentoRepository.findAll();
-		return lancamentoList;
+	@Autowired
+	private MessageSource messageSource;
+	
+	public Page<Lancamento> filter(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return lancamentoRepository.filter(lancamentoFilter, pageable);
 		
+//		código para retornar somente ids das entidades relacionadas
 //		List<LancamentoDTO> lancamentoDTOList = new ArrayList<LancamentoDTO>();
 //		
 //		for (Lancamento lancamento : lancamentoList) {
@@ -31,6 +44,30 @@ public class LancamentoService {
 //			lancamentoDTOList.add(dto);
 //		}
 //		return null;
+	}
+	
+	public Lancamento findById(Long codigo) {
+		Lancamento lancamento =  lancamentoRepository.findOne(codigo);
+		if(lancamento == null) throw new EmptyResultDataAccessException(1);
+		return lancamento;
+	}
+	
+	public Lancamento create(Lancamento lancamento) {
+		
+		if(lancamento.getCodigo() != null) throw new HttpMessageNotReadableException(
+				messageSource.getMessage("codigo.fora.escopo.requisicao", 
+				null, LocaleContextHolder.getLocale()));
+		
+		Pessoa pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+		if (pessoa == null || pessoa.isInativo()) {
+			throw new PessoaInexistenteOuInativaException();
+		}
+
+		return lancamentoRepository.save(lancamento);
+	}
+
+	public void delete(Long codigo) {
+		lancamentoRepository.delete(codigo);
 	}
 	
 }

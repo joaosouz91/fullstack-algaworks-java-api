@@ -41,8 +41,9 @@ public class CategoriaController {
 //	}
 
 	@GetMapping
-	public List<Categoria> findAll(){
-		return categoriaRepository.findAll();
+	public ResponseEntity<List<Categoria>> findAll(){
+		List<Categoria> categoriaList = categoriaRepository.findAll();
+		return !categoriaList.isEmpty() ? ResponseEntity.ok(categoriaList) : ResponseEntity.noContent().build();
 	}
 	
 //	@PostMapping
