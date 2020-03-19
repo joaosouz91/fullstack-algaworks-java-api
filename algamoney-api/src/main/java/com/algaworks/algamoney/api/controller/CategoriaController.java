@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,8 +41,10 @@ public class CategoriaController {
 //		List<Categoria> categorias = categoriaRepository.findAll();
 //		return !categorias.isEmpty()? ResponseEntity.ok(categorias) : ResponseEntity.noContent().build();
 //	}
-
+	
+	//@CrossOrigin(maxAge = 10, origins = "http://localhost:3000")
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')") // alem da permissao do usuario tem a permissao da aplicacao tbm (scope)
 	public ResponseEntity<List<Categoria>> findAll(){
 		List<Categoria> categoriaList = categoriaRepository.findAll();
 		return !categoriaList.isEmpty() ? ResponseEntity.ok(categoriaList) : ResponseEntity.noContent().build();
@@ -57,6 +61,7 @@ public class CategoriaController {
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		Categoria categoriaSalva = categoriaRepository.save(categoria);
 		eventPublisher.publishEvent(new CreatedResourceEvent(this, response, categoriaSalva.getCodigo()));
@@ -64,6 +69,7 @@ public class CategoriaController {
 	}
 	
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Categoria> findById(@PathVariable("codigo") Long id) {
 		Categoria categoria = categoriaRepository.findOne(id);
 		return categoria != null? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
